@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+a = '''
+ +-+-+-+-+ +-+-+ +-+-+-+-+-+-+-+-+-+-+-+-+
+ |c|o|d|e| |b|y| |m|a|n|s|o|o|r|.|c|o|d|e|
+ +-+-+-+-+ +-+-+ +-+-+-+-+-+-+-+-+-+-+-+-+
+'''
+print(a)
+
 #importing module named subprocess
 import subprocess
 
