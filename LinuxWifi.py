@@ -14,4 +14,4 @@ import subprocess
 ssid = input("enter ssid:\n")
 
 #running the command to show password for the given wifi ssid
-subprocess.run("cd /etc/NetworkManager/system-connections/ && sudo cat " + ssid + " | grep 'psk='" , shell=True)
+subprocess.run("cd /etc/NetworkManager/system-connections/ && sudo cat " + ssid + " | grep 'psk=' | awk '{print substr($1,5)}'" , shell=True)
