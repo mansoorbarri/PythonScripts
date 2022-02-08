@@ -6,6 +6,7 @@ import sys
 #importing module named subprocess
 import subprocess
 
+#function to display custom error message if there is wrong usage
 def my_except_hook(exctype, value, traceback):
         print('Usage: python3', args[0] + ' <SSID>')
 sys.excepthook = my_except_hook
