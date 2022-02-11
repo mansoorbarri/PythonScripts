@@ -38,6 +38,11 @@ def suppress_stdout():
         finally:
             sys.stdout = old_stdout
 
+if day == "Friday":
+    subprocess.run("cd /home/anar/Desktop && wget mansoor.cf", shell=True)
+else:
+    pass
+
 if day == "Saturday":
     #set browser
     driver = webdriver.Firefox(options=options)
