@@ -64,7 +64,7 @@ if day == "Saturday":
     print("Downloading Episode...")
     with suppress_stdout():
          #download video
-         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + vurl, shell=True)
+         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + url, shell=True)
     #prints confirmation
     print("Episode Downloaded")
     #prints time taken to complete in seconds
@@ -94,7 +94,7 @@ if day == "Sunday":
     print("Downloading Episode...")
     with suppress_stdout():
          #download video
-         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + vurl, shell=True)
+         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + url, shell=True)
     #prints confirmation
     print("Episode Downloaded")
     #prints time taken to complete in seconds
@@ -124,7 +124,7 @@ if day == "Monday":
     print("Downloading Episode...")
     with suppress_stdout():
          #download video
-         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + vurl, shell=True)
+         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + url, shell=True)
     #prints confirmation
     print("Episode Downloaded")
     #prints time taken to complete in seconds
@@ -159,7 +159,7 @@ if day == "Wednesday":
     print("Downloading Episode...")
     with suppress_stdout():
          #download video
-         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + vurl, shell=True)
+         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + url, shell=True)
     #prints confirmation
     print("Episode Downloaded")
     #prints time taken to complete in seconds
@@ -205,7 +205,7 @@ if day == "Thursday":
     print("Downloading Episode...")
     with suppress_stdout():
          #download video
-         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + vurl, shell=True)
+         subprocess.run("cd ~/Desktop && yt-dlp --write-subs --sub-format 'srt' --format 'mp4' " + url, shell=True)
     #prints confirmation
     print("Episode Downloaded")
     #prints time taken to complete in seconds
