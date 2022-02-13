@@ -75,7 +75,7 @@ else:
 
 if day == "Sunday":
     #set browser
-    driver = webdriver.Firefox(options=options)
+    driver = webdriver.Firefox()
     #this opens the website link
     driver.get("https://www.youtube.com/c/HumTvpak/playlists")
     time.sleep(1)
@@ -84,10 +84,11 @@ if day == "Sunday":
     time.sleep(1)
     #playlist
     driver.find_element_by_css_selector('ytd-grid-playlist-renderer.style-scope:nth-child(8) > h3:nth-child(2) > a:nth-child(1)').click()
+    time.sleep(3)
     #episode
-    driver.find_element_by_css_selector('ytd-playlist-video-renderer.style-scope:nth-child(5) > div:nth-child(2) > div:nth-child(1) > ytd-thumbnail:nth-child(1) > a:nth-child(1)').click()
+    driver.find_element_by_css_selector('ytd-playlist-video-renderer.style-scope:nth-child(6) > div:nth-child(2) > div:nth-child(1) > ytd-thumbnail:nth-child(1) > a:nth-child(1)').click()
     #wait for the site to load
-    time.sleep(4) 
+    time.sleep(3) 
     #store url in url variable
     url = (driver.current_url)
    #prints confirmation
