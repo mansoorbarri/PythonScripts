@@ -21,7 +21,7 @@ Other python file will only work locally*
 
 Contributions are always welcome!
 
-mail at contact@mansoor.cf for ways to get started.
+visit [mansoor.cf/socials](https://www.mansoor.cf/socials) for ways to get started.
 
 
 ## 🔗 Links
