@@ -11,6 +11,13 @@ import sys, os
 from datetime import date
 import calendar
 
+a = '''
+ +-++-++-++-+ +-++-+ +-++-++-++-++-++-++-+ +-++-++-++-++-+
+ |c||o||d||e| |b||y| |M||a||n||s||o||o||r| |B||a||r||r||i|
+ +-++-++-++-+ +-++-+ +-++-++-++-++-++-++-+ +-++-++-++-++-+
+'''
+print(a)
+
 #store start time 
 start_time = time.time()
 
