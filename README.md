@@ -5,7 +5,7 @@ Collection of python scripts for various uses
 ## Usage
 
 ```
-wget https://raw.githubusercontent.com/mansoorbarri/PythonScripts/main/LinuxWifi.py<filename>
+wget https://raw.githubusercontent.com/mansoorbarri/PythonScripts/main/<filename>
 python3 <filename>
 ```
 
