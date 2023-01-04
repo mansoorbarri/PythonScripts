@@ -12,13 +12,18 @@ x=" "
 post_md = args[2] + ".md"
 
 # copy the images 
-subprocess.run("cp -r " + beta_dir + "images/" + args[1] + "/" + args[2] + x + base_dir + "images/" + args[1] + "/" + args[2], shell=True)
+subprocess.run("cp -r " + beta_dir + "images/" + args[1] + args[2] + x + base_dir + "images/" + args[1] + args[2], shell=True)
 
-print("\n Images copied to: " + base_dir + "images/" + args[1] + "/" + args[2])
+print("\n Images copied to: " + base_dir + "images/" + args[1] + args[2])
 
 # copy .md file
-subprocess.run("cp -r " + beta_dir + "content/" + args[1] + "/" + post_md + x + base_dir + "content/" + args[1] + "/", shell=True)
+subprocess.run("cp -r " + beta_dir + "content/" + args[1] + post_md + x + base_dir + "content/" + args[1], shell=True)
 
-print("\n .md file copied to: " + base_dir + "content/" + args[1] + "/" + args[2])
+print("\n .md file copied to: " + base_dir + "content/" + args[1] + args[2])
+
+# delete the files
+subprocess.run("rm -rf " + beta_dir + "images/" + args[1] + args[2] + "/*", shell=True)
+
+subprocess.run("rm -rf " + base_dir + "images/" + args[1] + args[2] + "/*", shell=True)
 
 exit()
