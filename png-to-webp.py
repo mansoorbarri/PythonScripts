@@ -1,18 +1,29 @@
 # Import the Image module from the Python Imaging Library (PIL) 
 from PIL import Image
-# Import the os module to work with files and directories
-import os 
+
+#!/usr/bin/env python3
+
+# ASCII art
+a = '''
+ +-++-++-++-+ +-++-+ +-++-++-++-++-++-++-+ +-++-++-++-++-+
+ |c||o||d||e| |b||y| |M||a||n||s||o||o||r| |B||a||r||r||i|
+ +-++-++-++-+ +-++-+ +-++-++-++-++-++-++-+ +-++-++-++-++-+
+'''
+print(a)
+
+# Import the os and sys modules to work with files and directories
+import os
+import sys
 
 # Define a function named "convert_png_to_webp"
 def convert_png_to_webp():
-    # Prompt the user to enter the path to the input PNG file and store it in a variable named "input_path"
-    input_path = input("Enter the path to the input PNG file: ")
-    # Prompt the user to enter the path where the output WebP file should be saved and store it in a variable named "output_path"
-    output_path = input("Enter the path where the output WebP file should be saved: ")
+    # Get the input path and output path from the command line arguments
+    input_path = '/home/anar/' + sys.argv[1]
+    output_path = '/home/anar/' + sys.argv[2]
     
     # Use the "os.path.abspath" method to get the absolute path of the input and output paths
-    input_abs_path = os.path.abspath(os.path.join('/home/anar/', input_path))
-    output_abs_path = os.path.abspath(os.path.join('/home/anar/', output_path))
+    input_abs_path = os.path.abspath(input_path)
+    output_abs_path = os.path.abspath(output_path)
 
     # Use the "with" statement to open the input PNG file using the Image module from PIL 
     # and store it in a variable named "img"
@@ -20,6 +31,7 @@ def convert_png_to_webp():
         # Use the "save" method to save the opened image as a WebP file 
         # and store it in the output path specified by the user 
         img.save(output_path, 'webp')
+        print("~/" + sys.argv[1] + " is converted and saved at " + "~/" + sys.argv[2])
 
 # Call the "convert_png_to_webp" function to execute the code 
 convert_png_to_webp()
