@@ -5,8 +5,9 @@ import markdown2
 with open("template.html", "r") as file:
     html_content = file.read()
 
-# Get the user's input for the message in Markdown format
-markdown_message = input("Enter the message in Markdown format: ")
+# Read the Markdown message from the .md file
+with open("message.md", "r") as markdown_file:
+    markdown_message = markdown_file.read()
 
 # Convert the Markdown message to HTML
 html_message = markdown2.markdown(markdown_message)
