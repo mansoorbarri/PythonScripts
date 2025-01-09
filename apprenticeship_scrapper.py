@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
 import json
 
 PROCESSED_FILE = "processed_listings.json"
@@ -50,7 +49,7 @@ def parse_apprenticeships(html_content, processed_listings):
     
     for listing in listings:
         date_elem = listing.find('p', class_='govuk-body govuk-!-font-size-16 das-!-color-dark-grey')
-        if date_elem and "Posted 9 January" in date_elem.text:
+        if date_elem and "Posted 9 January" in date_elem.text:  # Adjust the date check as needed
             title = listing.find('h2', class_='govuk-heading-m').find('a').text.strip()
             company = listing.find('p', class_='govuk-body govuk-!-margin-bottom-0').text.strip()
             location = listing.find('p', class_='govuk-body das-!-color-dark-grey').text.strip()
@@ -80,35 +79,53 @@ def parse_apprenticeships(html_content, processed_listings):
     
     return new_posts
 
-def format_for_discord(apprenticeships):
+def format_for_discord(apprenticeships, role_id):
     """
     Format apprenticeship listings for Discord using markdown.
     """
     if not apprenticeships:
-        return "No new apprenticeships found."
-    
-    output = ""
+        return f"===<@&{role_id}>===\nNo new apprenticeships found.\n"
+
+    postings = ""
     for app in apprenticeships:
         title_with_location = f"{app['title']} in {app['location']}"
-        output += f"## {title_with_location}\n"
-        output += f"**Wage:** {app['wage']}\n"
-        output += f"**Company:** {app['company']}\n"
-        output += f"**Closes:** {app['closing_date'].replace('Closes on ', '').replace('Closes in ', '')}\n"
-        output += f"**Link:** {app['job_url']}\n\n"
+        postings += f"**{title_with_location}**\n"
+        postings += f"**Wage:** {app['wage']}\n"
+        postings += f"**Company:** {app['company']}\n"
+        postings += f"**Closes:** {app['closing_date'].replace('Closes on ', '').replace('Closes in ', '')}\n"
+        postings += f"**Link:** {app['job_url']}\n\n"
     
-    return output.strip()
+    return f"===<@&{role_id}>===\n{postings.strip()}\n"
 
 # Main execution
 if __name__ == "__main__":
-    url = "https://www.findapprenticeship.service.gov.uk/apprenticeships?sort=AgeAsc&searchTerm=&location=&distance=all&levelIds=6&routeIds=7&routeIds=9&routeIds=12"
+    categories = {
+        "digital": {
+            "url": "https://www.findapprenticeship.service.gov.uk/apprenticeships?sort=AgeAsc&searchTerm=&location=&distance=all&levelIds=6&routeIds=7",
+            "role_id": "1320824958359961721",
+        },
+        "engineering": {
+            "url": "https://www.findapprenticeship.service.gov.uk/apprenticeships?sort=AgeAsc&searchTerm=&location=&distance=all&levelIds=6&routeIds=9",
+            "role_id": "1320456602796556358",
+        },
+        "finance": {
+            "url": "https://www.findapprenticeship.service.gov.uk/apprenticeships?sort=AgeAsc&searchTerm=&location=&distance=all&levelIds=6&routeIds=12",
+            "role_ids": ["1320456655883730985", "1320456695415177310"],
+        },
+    }
     
     processed_listings = load_processed_listings()
-    new_apprenticeships = fetch_apprenticeships(url, processed_listings)
     
-    if new_apprenticeships:
-        new_ids = {app['id'] for app in new_apprenticeships}
-        processed_listings.update(new_ids)
-        save_processed_listings(processed_listings)
-    
-    discord_formatted = format_for_discord(new_apprenticeships)
-    print(discord_formatted)
+    for category, data in categories.items():
+        url = data["url"]
+        role_ids = data.get("role_ids") or [data["role_id"]]  # Handle single or multiple role IDs
+        new_apprenticeships = fetch_apprenticeships(url, processed_listings)
+        
+        if new_apprenticeships:
+            new_ids = {app['id'] for app in new_apprenticeships}
+            processed_listings.update(new_ids)
+            save_processed_listings(processed_listings)
+        
+        for role_id in role_ids:
+            discord_message = format_for_discord(new_apprenticeships, role_id)
+            print(discord_message)
