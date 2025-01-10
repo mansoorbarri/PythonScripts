@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+from datetime import datetime
 
 PROCESSED_FILE = "processed_listings.json"
 
@@ -44,12 +45,14 @@ def parse_apprenticeships(html_content, processed_listings):
     """
     soup = BeautifulSoup(html_content, 'html.parser')
     new_posts = []
+    today = datetime.now()
+    today_str = f"Posted {today.day} {today.strftime('%B')}"  # Creates format like "Posted 10 January"
     
     listings = soup.find_all('li', class_='das-search-results__list-item')
     
     for listing in listings:
         date_elem = listing.find('p', class_='govuk-body govuk-!-font-size-16 das-!-color-dark-grey')
-        if date_elem and "Posted 9 January" in date_elem.text:  # Adjust the date check as needed
+        if date_elem and today_str in date_elem.text:
             title = listing.find('h2', class_='govuk-heading-m').find('a').text.strip()
             company = listing.find('p', class_='govuk-body govuk-!-margin-bottom-0').text.strip()
             location = listing.find('p', class_='govuk-body das-!-color-dark-grey').text.strip()
