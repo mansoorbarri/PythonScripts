@@ -87,7 +87,7 @@ def format_for_discord(apprenticeships, role_id):
     Format apprenticeship listings for Discord using markdown.
     """
     if not apprenticeships:
-        return f"===<@&{role_id}>===\nNo new apprenticeships found.\n"
+        return f"==={role_id}===\nNo new apprenticeships found.\n"
 
     postings = ""
     for app in apprenticeships:
@@ -98,22 +98,22 @@ def format_for_discord(apprenticeships, role_id):
         postings += f"**Closes:** {app['closing_date'].replace('Closes on ', '').replace('Closes in ', '')}\n"
         postings += f"**Link:** {app['job_url']}\n\n"
     
-    return f"===<@&{role_id}>===\n{postings.strip()}\n"
+    return f"==={role_id}===\n{postings.strip()}\n"
 
 # Main execution
 if __name__ == "__main__":
     categories = {
         "digital": {
             "url": "https://www.findapprenticeship.service.gov.uk/apprenticeships?sort=AgeAsc&searchTerm=&location=&distance=all&levelIds=6&routeIds=7",
-            "role_id": "1320824958359961721",
+            "role_id": "Tech",
         },
         "engineering": {
             "url": "https://www.findapprenticeship.service.gov.uk/apprenticeships?sort=AgeAsc&searchTerm=&location=&distance=all&levelIds=6&routeIds=9",
-            "role_id": "1320456602796556358",
+            "role_id": "Engineering",
         },
         "finance": {
             "url": "https://www.findapprenticeship.service.gov.uk/apprenticeships?sort=AgeAsc&searchTerm=&location=&distance=all&levelIds=6&routeIds=12",
-            "role_ids": ["1320456655883730985", "1320456695415177310"],
+            "role_ids": ["Finance", "Law"],
         },
     }
     
