@@ -148,7 +148,7 @@ def create_excel_workbook(all_listings, categories):
             sheet.cell(row=row, column=6, value=listing.get('job_url', 'N/A'))
     
     # Save the workbook
-    filename = f"Apprenticeships_{datetime.now().strftime('%Y%m%d')}.xlsx"
+    filename = f"Apprenticeships.xlsx"
     wb.save(filename)
     print(f"Excel workbook saved as {filename}")
     return filename
