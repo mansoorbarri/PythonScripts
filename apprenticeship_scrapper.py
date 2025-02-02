@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from datetime import datetime
-import openpyxl
 
 PROCESSED_FILE = "processed_listings.json"
 
@@ -101,58 +100,6 @@ def format_for_discord(apprenticeships, role_id):
     
     return f"==={role_id}===\n{postings.strip()}\n"
 
-def create_excel_workbook(all_listings, categories):
-    """
-    Create an Excel workbook with apprenticeship data.
-    """
-    # Create a new workbook
-    wb = openpyxl.Workbook()
-    
-    # Remove the default sheet
-    default_sheet = wb.active
-    wb.remove(default_sheet)
-
-    # Mapping of roles to their respective category
-    role_to_category = {}
-    for category, data in categories.items():
-        role_ids = data.get("role_ids") or [data["role_id"]]
-        for role_id in role_ids:
-            role_to_category[role_id] = category
-
-    # Create sheets for each role/category
-    for role_id, category in role_to_category.items():
-        # Create a new sheet
-        sheet = wb.create_sheet(title=role_id)
-        
-        # Write headers
-        headers = ['Title', 'Company', 'Location', 'Wage', 'Closing Date', 'Job URL']
-        for col, header in enumerate(headers, start=1):
-            sheet.cell(row=1, column=col, value=header)
-        
-        # Filter listings for this role
-        role_listings = [
-            listing for listing in all_listings 
-            if any(role.lower() in listing.get('title', '').lower() 
-                   or role.lower() in listing.get('location', '').lower() 
-                   or role.lower() in listing.get('company', '').lower() 
-                   for role in [role_id])
-        ]
-        
-        # Write listings
-        for row, listing in enumerate(role_listings, start=2):
-            sheet.cell(row=row, column=1, value=listing.get('title', 'N/A'))
-            sheet.cell(row=row, column=2, value=listing.get('company', 'N/A'))
-            sheet.cell(row=row, column=3, value=listing.get('location', 'N/A'))
-            sheet.cell(row=row, column=4, value=listing.get('wage', 'N/A'))
-            sheet.cell(row=row, column=5, value=listing.get('closing_date', 'N/A'))
-            sheet.cell(row=row, column=6, value=listing.get('job_url', 'N/A'))
-    
-    # Save the workbook
-    filename = f"Apprenticeships.xlsx"
-    wb.save(filename)
-    print(f"Excel workbook saved as {filename}")
-    return filename
-
 # Main execution
 if __name__ == "__main__":
     categories = {
@@ -171,13 +118,11 @@ if __name__ == "__main__":
     }
     
     processed_listings = load_processed_listings()
-    all_new_listings = []
     
     for category, data in categories.items():
         url = data["url"]
         role_ids = data.get("role_ids") or [data["role_id"]]  # Handle single or multiple role IDs
         new_apprenticeships = fetch_apprenticeships(url, processed_listings)
-        all_new_listings.extend(new_apprenticeships)
         
         if new_apprenticeships:
             new_ids = {app['id'] for app in new_apprenticeships}
@@ -187,7 +132,3 @@ if __name__ == "__main__":
         for role_id in role_ids:
             discord_message = format_for_discord(new_apprenticeships, role_id)
             print(discord_message)
-    
-    # Create Excel workbook with all new listings
-    if all_new_listings:
-        create_excel_workbook(all_new_listings, categories)
