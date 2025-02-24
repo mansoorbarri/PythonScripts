@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import json
 from datetime import datetime
 
-PROCESSED_FILE = "processed_listings.json"
+PROCESSED_FILE = "/home/anar/Music/anar/gh/PythonScripts/processed_listings.json"
 
 def load_processed_listings():
     """Load processed listings from a JSON file."""
