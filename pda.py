@@ -84,7 +84,7 @@ def format_for_terminal(apprenticeships): # Simplified for terminal output
 
 
 if __name__ == "__main__":
-    url = "https://www.findapprenticeship.service.gov.uk/apprenticeships?sort=AgeAsc&searchTerm=&location=M29+7AR&distance=20&levelIds=5&levelIds=6&routeIds=7#"  # Your specific URL
+    url = "https://www.findapprenticeship.service.gov.uk/apprenticeships?location=M29+7AR&distance=20&routeIds=7&sort=AgeAsc"  # Your specific URL
     processed_listings = load_processed_listings()
     new_apprenticeships = fetch_apprenticeships(url, processed_listings)
 
