@@ -3,7 +3,19 @@ from bs4 import BeautifulSoup
 import json
 from datetime import datetime
 
-PROCESSED_FILE = "/home/anar/Music/anar/gh/PythonScripts/pda.json"  # Changed to relative path
+PROCESSED_FILE = "/home/anar/Music/anar/gh/PythonScripts/pda.json"
+
+# ANSI color codes
+class Colors:
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    MAGENTA = '\033[95m'
+    WHITE = '\033[97m'
+    BOLD = '\033[1m'
+    DIM = '\033[2m'
+    RESET = '\033[0m'
 
 def load_processed_listings():
     try:
@@ -68,19 +80,27 @@ def parse_apprenticeships(html_content, processed_listings):
     return new_posts
 
 
-def format_for_terminal(apprenticeships): # Simplified for terminal output
-    if not apprenticeships:
-        return "No new apprenticeships found."
+def format_for_terminal(apprenticeships):
+    c = Colors
 
-    output = ""
-    for app in apprenticeships:
-        output += f"Title: {app['title']}\n"
-        output += f"Location: {app['location']}\n"
-        output += f"Company: {app['company']}\n"
-        output += f"Wage: {app['wage']}\n"
-        output += f"Closes: {app['closing_date']}\n"
-        output += f"Link: {app['job_url']}\n\n"
-    return output.strip()
+    if not apprenticeships:
+        return f"{c.YELLOW}No new apprenticeships found.{c.RESET}"
+
+    count = len(apprenticeships)
+    header = f"\n{c.BOLD}{c.GREEN}═══ Found {count} new apprenticeship{'s' if count != 1 else ''} ═══{c.RESET}\n"
+
+    output = header
+    for i, app in enumerate(apprenticeships, 1):
+        output += f"{c.DIM}{'─' * 50}{c.RESET}\n"
+        output += f"{c.BOLD}{c.CYAN}{app['title']}{c.RESET}\n"
+        output += f"{c.MAGENTA}{app['company']}{c.RESET}\n"
+        output += f"{c.WHITE}Location: {app['location']}{c.RESET}\n"
+        output += f"{c.GREEN}Wage: {app['wage']}{c.RESET}\n"
+        output += f"{c.YELLOW}Closes: {app['closing_date']}{c.RESET}\n"
+        output += f"{c.BLUE}{app['job_url']}{c.RESET}\n"
+
+    output += f"{c.DIM}{'─' * 50}{c.RESET}"
+    return output
 
 
 if __name__ == "__main__":
