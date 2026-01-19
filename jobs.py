@@ -2,6 +2,18 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
+# ANSI color codes
+class Colors:
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    MAGENTA = '\033[95m'
+    WHITE = '\033[97m'
+    BOLD = '\033[1m'
+    DIM = '\033[2m'
+    RESET = '\033[0m'
+
 def scrape_findajob(url):
     """
     Scrapes job listings from findajob.dwp.gov.uk
@@ -127,26 +139,28 @@ def main():
     new_jobs = [job for job in all_jobs if job.get('url') not in existing_urls]
     
     if not new_jobs:
-        print("No jobs found")
+        print(f"{Colors.YELLOW}No new jobs found.{Colors.RESET}")
         return
-    
-    for i, job in enumerate(new_jobs, 1):
-        print(f"\n{'='*70}")
-        print(f"JOB {i}")
-        print(f"{'='*70}")
-        print(f"Title:      {job.get('title', 'N/A')}")
-        print(f"Employer:   {job.get('employer', 'N/A')}")
-        print(f"Location:   {job.get('location', 'N/A')}")
-        print(f"Salary:     {job.get('salary', 'N/A')}")
-        print(f"Status:     {job.get('employment_status', 'N/A')}")
-        print(f"Hours:      {job.get('hours', 'N/A')}")
+
+    c = Colors
+    count = len(new_jobs)
+    print(f"\n{c.BOLD}{c.GREEN}═══ Found {count} new job{'s' if count != 1 else ''} ═══{c.RESET}\n")
+
+    for job in new_jobs:
+        print(f"{c.DIM}{'─' * 55}{c.RESET}")
+        print(f"  {c.BOLD}{c.CYAN}{job.get('title', 'N/A')}{c.RESET}")
+        print(f"  {c.DIM}at{c.RESET} {c.MAGENTA}{job.get('employer', 'N/A')}{c.RESET}")
+        print()
+        print(f"  {c.DIM}Location:{c.RESET}  {c.WHITE}{job.get('location', 'N/A')}{c.RESET}")
+        print(f"  {c.DIM}Salary:{c.RESET}    {c.GREEN}{job.get('salary', 'N/A')}{c.RESET}")
+        print(f"  {c.DIM}Type:{c.RESET}      {c.YELLOW}{job.get('employment_status', 'N/A')}{c.RESET}")
+        print(f"  {c.DIM}Hours:{c.RESET}     {c.YELLOW}{job.get('hours', 'N/A')}{c.RESET}")
         if 'remote_working' in job:
-            print(f"Remote:     {job['remote_working']}")
-        print(f"URL:        {job.get('url', 'N/A')}")
-    
-    # print(f"\n{'='*70}")
-    # print(f"Total: {len(new_jobs)} new job(s)")
-    # print(f"{'='*70}\n")
+            print(f"  {c.DIM}Remote:{c.RESET}    {c.WHITE}{job['remote_working']}{c.RESET}")
+        print()
+        print(f"  {c.BLUE}{job.get('url', 'N/A')}{c.RESET}")
+
+    print(f"{c.DIM}{'─' * 55}{c.RESET}")
     
     updated_jobs = existing_jobs + new_jobs
     with open('jobs.json', 'w', encoding='utf-8') as f:

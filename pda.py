@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import json
-from datetime import datetime
 
 PROCESSED_FILE = "/home/anar/Music/anar/gh/PythonScripts/pda.json"
 
@@ -45,14 +44,14 @@ def fetch_apprenticeships(url, processed_listings):
 def parse_apprenticeships(html_content, processed_listings):
     soup = BeautifulSoup(html_content, 'html.parser')
     new_posts = []
-    today = datetime.now()
-    today_str = f"Posted {today.day} {today.strftime('%B')}"
 
     listings = soup.find_all('li', class_='das-search-results__list-item')
 
     for listing in listings:
-        date_elem = listing.find('p', class_='govuk-body govuk-!-font-size-16 das-!-color-dark-grey')
-        if date_elem and today_str in date_elem.text:  # Check if posted today
+        job_url = listing.find('a', class_='das-search-results__link')['href']
+        job_id = job_url.split("/")[-1]
+
+        if job_id not in processed_listings:
             title = listing.find('h2', class_='govuk-heading-m').find('a').text.strip()
             company = listing.find('p', class_='govuk-body govuk-!-margin-bottom-0').text.strip()
             location = listing.find('p', class_='govuk-body das-!-color-dark-grey').text.strip()
@@ -63,19 +62,15 @@ def parse_apprenticeships(html_content, processed_listings):
             closing_elem = listing.find('p', class_='govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-1')
             closing_date = closing_elem.text.strip() if closing_elem else "Not specified"
 
-            job_url = listing.find('a', class_='das-search-results__link')['href']
-            job_id = job_url.split("/")[-1]
-
-            if job_id not in processed_listings:
-                new_posts.append({
-                    'id': job_id,
-                    'title': title,
-                    'location': location,
-                    'company': company,
-                    'wage': wage,
-                    'closing_date': closing_date,
-                    'job_url': f"https://www.findapprenticeship.service.gov.uk{job_url}",
-                })
+            new_posts.append({
+                'id': job_id,
+                'title': title,
+                'location': location,
+                'company': company,
+                'wage': wage,
+                'closing_date': closing_date,
+                'job_url': f"https://www.findapprenticeship.service.gov.uk{job_url}",
+            })
 
     return new_posts
 
@@ -90,16 +85,18 @@ def format_for_terminal(apprenticeships):
     header = f"\n{c.BOLD}{c.GREEN}═══ Found {count} new apprenticeship{'s' if count != 1 else ''} ═══{c.RESET}\n"
 
     output = header
-    for i, app in enumerate(apprenticeships, 1):
-        output += f"{c.DIM}{'─' * 50}{c.RESET}\n"
-        output += f"{c.BOLD}{c.CYAN}{app['title']}{c.RESET}\n"
-        output += f"{c.MAGENTA}{app['company']}{c.RESET}\n"
-        output += f"{c.WHITE}Location: {app['location']}{c.RESET}\n"
-        output += f"{c.GREEN}Wage: {app['wage']}{c.RESET}\n"
-        output += f"{c.YELLOW}Closes: {app['closing_date']}{c.RESET}\n"
-        output += f"{c.BLUE}{app['job_url']}{c.RESET}\n"
+    for app in apprenticeships:
+        output += f"{c.DIM}{'─' * 55}{c.RESET}\n"
+        output += f"  {c.BOLD}{c.CYAN}{app['title']}{c.RESET}\n"
+        output += f"  {c.DIM}at{c.RESET} {c.MAGENTA}{app['company']}{c.RESET}\n"
+        output += "\n"
+        output += f"  {c.DIM}Location:{c.RESET}  {c.WHITE}{app['location']}{c.RESET}\n"
+        output += f"  {c.DIM}Wage:{c.RESET}      {c.GREEN}{app['wage']}{c.RESET}\n"
+        output += f"  {c.DIM}Closes:{c.RESET}    {c.YELLOW}{app['closing_date']}{c.RESET}\n"
+        output += "\n"
+        output += f"  {c.BLUE}{app['job_url']}{c.RESET}\n"
 
-    output += f"{c.DIM}{'─' * 50}{c.RESET}"
+    output += f"{c.DIM}{'─' * 55}{c.RESET}"
     return output
 
 
